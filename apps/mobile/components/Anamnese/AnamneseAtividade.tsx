@@ -35,11 +35,13 @@ export default function AnamneseAtividade() {
             content={"Trabalho em pé ou caminhadas leves"}
             selected={atividade === "Leve"}
             onPress={() => setAtividade("Leve")}
+
             image={{
               uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729787046/leve_qcnhyy.png"
             }}
             imageWidth={60} 
             imageHeight={42.86} 
+
           />
           <CardFlexImage
             title={"Moderada"}

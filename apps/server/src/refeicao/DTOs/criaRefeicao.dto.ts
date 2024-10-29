@@ -1,13 +1,5 @@
 import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  ValidateNested
-} from "class-validator"
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator"
 
 import { TipoRefeicao } from "../tipoRefeicao.enum"
 
@@ -34,8 +26,4 @@ export class CreateRefeicaoDto {
   @ValidateNested({ each: true })
   @Type(() => RefeicaoAlimentoDTO)
   alimentos: RefeicaoAlimentoDTO[]
-
-  @IsInt()
-  @IsNotEmpty()
-  idUsuario: number
 }

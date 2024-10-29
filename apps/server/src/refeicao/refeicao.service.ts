@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Alimento } from "src/alimentos/alimentos.entity" // Import Alimento entity
+import { Alimento } from "src/alimentos/alimentos.entity"
 import { Usuario } from "src/usuario/usuario.entity"
 import { Repository } from "typeorm"
 
@@ -17,12 +17,12 @@ export class RefeicaoService {
     private readonly refeicaoAlimentoRepository: Repository<RefeicaoAlimento>,
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
-    @InjectRepository(Alimento) // Inject Alimento repository
+    @InjectRepository(Alimento)
     private readonly alimentoRepository: Repository<Alimento>
   ) {}
 
-  async createRefeicao(dto: CreateRefeicaoDto): Promise<Refeicao> {
-    const usuario = await this.usuarioRepository.findOne({ where: { id: dto.idUsuario } })
+  async createRefeicao(dto: CreateRefeicaoDto, idUsuario: number): Promise<void> {
+    const usuario = await this.usuarioRepository.findOne({ where: { id: idUsuario } })
     if (!usuario) {
       throw new Error("User not found")
     }
@@ -37,7 +37,6 @@ export class RefeicaoService {
         const alimento = await this.alimentoRepository.findOne({
           where: { id: alimentoDTO.alimentoId }
         })
-
         if (!alimento) {
           throw new Error(`Alimento with id ${alimentoDTO.alimentoId} not found`)
         }
@@ -51,14 +50,15 @@ export class RefeicaoService {
       })
     )
 
-    refeicao.alimentos = await this.refeicaoAlimentoRepository.save(alimentos)
-    return await this.refeicaoRepository.save(refeicao)
+    await this.refeicaoRepository.save(refeicao)
+
+    await this.refeicaoAlimentoRepository.save(alimentos)
   }
 
-  async getRefeicaoById(id: number): Promise<Refeicao> {
+  async getRefeicaoById(idRefeicao: number, idUsuario: number): Promise<Refeicao> {
     return this.refeicaoRepository.findOne({
-      where: { id },
-      relations: ["alimentos", "alimentos.alimento", "usuario"]
+      where: { id: idRefeicao, usuario: { id: idUsuario } },
+      relations: ["alimentos", "usuario"]
     })
   }
 }
