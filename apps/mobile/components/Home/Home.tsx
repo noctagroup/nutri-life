@@ -1,65 +1,58 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import GraficoCaloriaDiaria from "./GraficoCaloriaDiaria"
+import GraficoCaloriaSemanal from "./GraficoCaloriaSemanal"
 
 export default function PaginaHome() {
   return (
-    <View style={styles.containerPage}>
-      {/* Saudação */}
-      <Text style={styles.greetingText}>
-        Olá, <Text style={styles.userName}>Usuario!</Text>
-      </Text>
-      <GraficoCaloriaDiaria />
+    <ScrollView>
+      <View style={styles.containerPage}>
+        {/* Saudação */}
+        <Text style={styles.greetingText}>
+          Olá, <Text style={styles.userName}>Usuario!</Text>
+        </Text>
+        <GraficoCaloriaDiaria />
 
-      {/* Próxima refeição */}
-      <View style={styles.containerContent}>
-        <Text style={styles.mainText}>Próxima refeição:</Text>
-        <View style={styles.containerButtons}>
-          {/* Primeiro Card */}
-          <View style={styles.card}>
-            <View style={styles.cardLeft}>
-              <Text style={styles.cardTitle}>Almoço</Text>
-              <Image
-                source={{
-                  uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729794185/Breakfast_cg6dtn.png"
-                }}
-                style={{ width: 40, height: 40 }}
-              />
-            </View>
+        {/* Próxima refeição */}
+        <View style={styles.containerContent}>
+          <Text style={styles.mainText}>Sua ultima refeição foi:</Text>
+          <View style={styles.containerButtons}>
+            {/* Primeiro Card */}
+            <View style={styles.card}>
+              <View style={styles.cardLeft}>
+                <Text style={styles.cardTitle}>Almoço</Text>
+                <Image
+                  source={{
+                    uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729794185/Breakfast_cg6dtn.png"
+                  }}
+                  style={{ width: 40, height: 40 }}
+                />
+              </View>
 
-            <View style={styles.cardRight}>
-              <Text style={styles.cardContent}>
-                Arroz, Feijão, Salada de tomate, frango empanado
-              </Text>
-              <View style={styles.cardFooter}>
-                <Text style={styles.cardFooterText}>
-                  546 <Text style={styles.kcalText}>Kcal</Text>
+              <View style={styles.cardRight}>
+                <Text style={styles.cardContent}>
+                  Arroz, Feijão, Salada de tomate, frango empanado
                 </Text>
-                <Text style={styles.kcalText}>12:40</Text>
+                <View style={styles.cardFooter}>
+                  <Text style={styles.cardFooterText}>
+                    546 <Text style={styles.kcalText}>Kcal</Text>
+                  </Text>
+                  <Text style={styles.kcalText}>12:40</Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          {/* Segundo Card - Meta Calórica Semanal */}
-          <View style={styles.weeklyCard}>
-            <View style={styles.weeklyInfoContainer}>
-              <Text style={styles.weeklyText}>Meta Calorica Semanal</Text>
-              <Text style={styles.weeklyTextHighlight}>2070.99</Text>
-            </View>
-            <View style={styles.weeklyInfoContainer}>
-              <Text style={styles.weeklyText}>Ainda Falta</Text>
-              <Text style={styles.weeklyTextHighlight}>400.90</Text>
-            </View>
-            {/* Aqui é onde o gráfico circular será incluído no futuro */}
+            {/* Segundo Card - Meta Calórica Semanal */}
+            <GraficoCaloriaSemanal />
           </View>
         </View>
-      </View>
 
-      {/* Botão Adicionar Consumo */}
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>+ Adicionar Consumo</Text>
-      </TouchableOpacity>
-    </View>
+        {/* Botão Adicionar Consumo */}
+        <TouchableOpacity style={styles.addButton}>
+          <Text style={styles.addButtonText}>+ Adicionar Consumo</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -74,7 +67,8 @@ const styles = StyleSheet.create({
   greetingText: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#000"
+    color: "#000",
+    marginBottom: 15
   },
   userName: {
     color: "#9C121E"
@@ -101,9 +95,9 @@ const styles = StyleSheet.create({
     gap: 15
   },
   mainText: {
-    fontSize: 20,
-    textAlign: "left",
-   
+    marginTop: 25,
+    fontSize: 16,
+    textAlign: "left"
   },
   card: {
     flexDirection: "row",
@@ -157,7 +151,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: "center",
-    marginTop: 20
+    
   },
   addButtonText: {
     color: "#FFF",

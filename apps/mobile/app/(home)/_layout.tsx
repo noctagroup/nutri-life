@@ -1,23 +1,29 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome"
-import { Tabs } from "expo-router"
-import React from "react"
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
+import React from "react";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"]
-  color: string
+  name: React.ComponentProps<typeof FontAwesome>["name"];
+  color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
+  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function HomeLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "#9C121E",  // Active color
+        tabBarInactiveTintColor: "gray",    // Inactive color (change this as desired)
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: "Início",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
 
@@ -25,17 +31,17 @@ export default function HomeLayout() {
         name="stats"
         options={{
           title: "Estatísticas",
-          tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
         }}
       />
 
       <Tabs.Screen
-        name="profile"
+        name="adicionarConsumo"
         options={{
-          title: "Perfil",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />
+          title: "Adicionar Consumo",
+          tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
         }}
       />
     </Tabs>
-  )
+  );
 }
