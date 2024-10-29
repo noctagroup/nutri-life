@@ -7,10 +7,15 @@ export function CardBoasVindas() {
   return (
     <View style={[styles.card]}>
       {/* eslint-disable-next-line @typescript-eslint/no-require-imports */}
-      <Image style={styles.image} source={require("../../assets/images/hello.svg")} />
+      <Image
+        source={{
+          uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729783947/hello_wwslyo.png"
+        }}
+        style={{ width: 79.99, height: 80 }}
+      />
       <View style={styles.content}>
-        <Text style={styles.normalText}>{normalText}</Text>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.normalText}>Boas vindas ao</Text>
+        <Text style={styles.title}>NutriLife!</Text>
       </View>
     </View>
   )
@@ -26,8 +31,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#9C121E",
     justifyContent: "center",
     width: "100%",
-    height: 80,
-    borderRadius: 15,
+    height: 100,
+    borderRadius: 30,
     borderWidth: 0,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -46,7 +51,7 @@ const styles = StyleSheet.create({
   },
   normalText: {
     fontWeight: "regular",
-    fontSize: 27,
+    fontSize: 24,
     color: "#FFFFFF"
   },
   content: {

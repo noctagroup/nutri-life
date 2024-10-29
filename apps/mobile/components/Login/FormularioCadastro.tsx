@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router"
 import { useState } from "react"
-import { ActivityIndicator, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import { useCadastro } from "@/context/CadastroContext"
 
@@ -34,7 +34,7 @@ export default function FormularioCadastro() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/usuario", {
+      const response = await fetch("http://167.99.232.38:3000/usuario", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -70,51 +70,52 @@ export default function FormularioCadastro() {
     <View style={styles.container}>
       <Header />
       <View style={styles.whiteContainer}>
-        <InputLogin
-          value={dados.nome}
-          onChangeText={(text: string) => setDados({ ...dados, nome: text })}
-          placeholder="Nome"
-          isPassword={false}
-        />
-        <InputLogin
-          value={dados.sobrenome}
-          onChangeText={(text: string) => setDados({ ...dados, sobrenome: text })}
-          placeholder="Sobrenome"
-          isPassword={false}
-        />
-        <InputLogin
-          value={dados.email}
-          onChangeText={(text: string) => setDados({ ...dados, email: text })}
-          placeholder="Email"
-          isPassword={false}
-        />
-        <InputLogin
-          value={dados.senha}
-          onChangeText={(text: string) => setDados({ ...dados, senha: text })}
-          placeholder="Senha"
-          isPassword={true}
-        />
-        <InputLogin
-          value={dados.senha_confirma}
-          onChangeText={(text: string) => setDados({ ...dados, senha_confirma: text })}
-          placeholder="Confirmar Senha"
-          isPassword={true}
-        />
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <InputLogin
+            value={dados.nome}
+            onChangeText={(text: string) => setDados({ ...dados, nome: text })}
+            placeholder="Nome"
+            isPassword={false}
+          />
+          <InputLogin
+            value={dados.sobrenome}
+            onChangeText={(text: string) => setDados({ ...dados, sobrenome: text })}
+            placeholder="Sobrenome"
+            isPassword={false}
+          />
+          <InputLogin
+            value={dados.email}
+            onChangeText={(text: string) => setDados({ ...dados, email: text })}
+            placeholder="Email"
+            isPassword={false}
+          />
+          <InputLogin
+            value={dados.senha}
+            onChangeText={(text: string) => setDados({ ...dados, senha: text })}
+            placeholder="Senha"
+            isPassword={true}
+          />
+          <InputLogin
+            value={dados.senha_confirma}
+            onChangeText={(text: string) => setDados({ ...dados, senha_confirma: text })}
+            placeholder="Confirmar Senha"
+            isPassword={true}
+          />
 
-        {/* Show error message if it exists */}
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          {/* Show error message if it exists */}
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-        {/* Show loading indicator if the form is being submitted */}
-        {loading ? (
-          <ActivityIndicator size="large" color="#9C121E" />
-        ) : (
-          <RedButton onPress={handleFormSubmission} />
-        )}
+          {/* Show loading indicator if the form is being submitted */}
+          {loading ? (
+            <ActivityIndicator size="large" color="#9C121E" />
+          ) : (
+            <RedButton onPress={handleFormSubmission} />
+          )}
 
-        <OutlinedButton buttonText={`Cadastro pelo\nGoogle`} />
-        <View style={{ flex: 1, flexDirection: "column", marginTop: 20 }}>
+          <OutlinedButton buttonText={`Cadastro pelo\nGoogle`} />
+          <View style={{marginTop: 30}}></View>
           <Footer textoFooter={"Ja cadastrado?"} footerOption={FooterOption.LOGIN} />
-        </View>
+        </ScrollView>
 
         {/* Modal for Success/Message */}
         <Modal
@@ -155,7 +156,10 @@ const styles = StyleSheet.create({
     paddingStart: 40,
     paddingEnd: 40,
     paddingTop: 50,
-    alignItems: "center"
+  },
+  scrollContent: {
+    alignItems: "center",
+    paddingBottom: 50,
   },
   errorText: {
     color: "red",

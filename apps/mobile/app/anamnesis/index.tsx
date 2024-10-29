@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F4F4"
   },
   containerButtons: {
-    flexShrink: 1, // Allow shrinking based on its content
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F4F4F4",
-    width: "100%",
+    width: 315,
+    height: 230,
     gap: 15
   },
   containerPagination: {
@@ -68,7 +68,9 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 18,
     textAlign: "left",
-    width: "100%"
+    width: "100%",
+    marginTop: 15,
+    paddingStart: 5
   },
   button: {
     paddingVertical: 20,

@@ -35,24 +35,29 @@ export default function AnamneseObjetivo() {
             content={"Perder peso de forma saudável"}
             selected={objetivo === "Emagrecer"}
             onPress={() => setObjetivo("Emagrecer")}
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image={require("../../assets/images/emagrecer.svg")}
+            image={{
+              uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729787532/emagreceremagrecer_dsylxu.png"
+            }}
           />
           <CardFlexImage
             title={"Manter o peso"}
             content={"Manter o peso com saúde"}
             selected={objetivo === "ManterPeso"}
             onPress={() => setObjetivo("ManterPeso")}
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image={require("../../assets/images/manterpeso.svg")}
+            image={{
+              uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729790037/manteremagrecer_h9vulh.png"
+            }}
+           
           />
           <CardFlexImage
             title={"Ganhar peso"}
             content={"Aumentar a massa magra"}
             selected={objetivo === "GanharPeso"}
             onPress={() => setObjetivo("GanharPeso")}
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image={require("../../assets/images/ganharpeso.svg")}
+            image={{
+              uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729787557/ganhar_znmk3v.png"
+            }}
+         
           />
         </View>
       </View>
@@ -79,7 +84,6 @@ const styles = StyleSheet.create({
   containerContent: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     width: "100%",
     backgroundColor: "#F4F4F4",
     gap: 20
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 24,
     textAlign: "left",
-    width: "100%"
+    width: "100%",
+    marginBottom: 100
   }
 })

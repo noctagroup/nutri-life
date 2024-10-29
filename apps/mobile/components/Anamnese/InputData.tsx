@@ -11,10 +11,8 @@ export function InputData({ selected, date, setDate }: InputDataProps) {
   const [error, setError] = useState("")
 
   const handleDateChange = (text: string) => {
-    // Remove non-numeric characters
     const cleanText = text.replace(/[^0-9]/g, "")
 
-    // Format the text to dd/mm/yyyy
     if (cleanText.length <= 2) {
       setDate(cleanText)
     } else if (cleanText.length <= 4) {
@@ -23,7 +21,6 @@ export function InputData({ selected, date, setDate }: InputDataProps) {
       setDate(`${cleanText.slice(0, 2)}/${cleanText.slice(2, 4)}/${cleanText.slice(4)}`)
     }
 
-    // Basic validation of the date in the format dd/mm/yyyy
     if (cleanText.length === 8) {
       const day = parseInt(cleanText.slice(0, 2), 10)
       const month = parseInt(cleanText.slice(2, 4), 10)
@@ -40,7 +37,7 @@ export function InputData({ selected, date, setDate }: InputDataProps) {
   }
 
   return (
-    <View>
+    <View style={{ width: "100%", flex: 1 }}>
       <TextInput
         style={[styles.card, selected && styles.selectedCard]}
         placeholder="__ /__ /____"
@@ -48,6 +45,7 @@ export function InputData({ selected, date, setDate }: InputDataProps) {
         onChangeText={handleDateChange}
         keyboardType="numeric"
         maxLength={10}
+       
       />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
@@ -70,8 +68,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 4,
-    fontWeight: "bold",
-    fontSize: 24
+    fontSize: 24,
   },
   selectedCard: {
     borderWidth: 2,

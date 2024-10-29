@@ -5,7 +5,9 @@ export function CardFlexImage({
   content,
   image,
   selected,
-  onPress
+  onPress,
+  imageWidth = 60, // Largura padrão
+  imageHeight = 51.82 // Altura padrão
 }: {
   title: string
   content: string
@@ -14,12 +16,14 @@ export function CardFlexImage({
   selected: boolean
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   onPress: Function
+  imageWidth?: number // Adiciona largura dinâmica
+  imageHeight?: number // Adiciona altura dinâmica
 }) {
   return (
     <TouchableOpacity
       style={[styles.card, selected && styles.selectedCard]}
       onPress={() => onPress()}>
-      <Image style={styles.image} source={image} />
+      <Image style={{ width: imageWidth, height: imageHeight }} source={image} />
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
         <Text>{content}</Text>
@@ -32,13 +36,13 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     flexDirection: "row",
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    padding: 20,
     gap: 20,
     backgroundColor: "#fff",
-    justifyContent: "center",
+    justifyContent: "center", // Centraliza a imagem e o conteúdo no eixo vertical
+    alignItems: "center", // Centraliza o conteúdo verticalmente
     width: "100%",
-    height: 80,
+    minHeight: 110,
     borderRadius: 15,
     borderWidth: 0,
     shadowColor: "#000",
@@ -53,16 +57,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 20
+    fontSize: 20,
+    textAlign: "left" // Texto alinhado à esquerda
   },
   content: {
     flex: 1,
     flexDirection: "column",
+    justifyContent: "center", // Centraliza o conteúdo no eixo vertical
     width: "100%",
-    textAlign: "center",
+    textAlign: "left", // Texto alinhado à esquerda
     fontSize: 16
-  },
-  image: {
-    width: 60
   }
 })

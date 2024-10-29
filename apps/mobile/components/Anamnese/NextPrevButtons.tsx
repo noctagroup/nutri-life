@@ -1,4 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
+import Icon from "react-native-vector-icons/Feather" 
 
 interface PaginationButtonsProps {
   showNext?: boolean
@@ -19,12 +20,14 @@ export function PaginationButtons({
     <View style={[styles.container, { justifyContent: justifyContentStyle }]}>
       {showPrevious && (
         <TouchableOpacity style={styles.button} onPress={onPreviousPress}>
-          <Text style={styles.buttonText}>{"<"}</Text>
+          {/* Replace the text with an icon */}
+          <Icon name="chevron-left" size={24} color="#9C121E" />
         </TouchableOpacity>
       )}
       {showNext && (
         <TouchableOpacity style={styles.button} onPress={onNextPress}>
-          <Text style={styles.buttonText}>{">"}</Text>
+          {/* Replace the text with an icon */}
+          <Icon name="chevron-right" size={24} color="#9C121E" />
         </TouchableOpacity>
       )}
     </View>
@@ -50,12 +53,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 4
-  },
-  buttonText: {
-    fontSize: 24,
-    fontWeight: "200",
-    color: "#9C121E",
-    textAlign: "center"
+    elevation: 4,
+    justifyContent: "center", // Center the icon inside the button
+    alignItems: "center"
   }
 })

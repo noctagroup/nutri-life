@@ -10,7 +10,7 @@ export default class Anamnesis {
         return
       }
 
-      const response = await fetch("http://localhost:3000/anamnese/check", {
+      const response = await fetch("http://167.99.232.38:3000/anamnese/check", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`

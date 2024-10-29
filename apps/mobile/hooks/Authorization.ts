@@ -7,7 +7,7 @@ export default class Authorization {
       const token = await AsyncStorage.getItem("userToken")
 
       if (token) {
-        const response = await fetch("http://localhost:3000/auth/check", {
+        const response = await fetch("http://167.99.232.38:3000/auth/check", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`

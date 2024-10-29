@@ -35,24 +35,35 @@ export default function AnamneseAtividade() {
             content={"Trabalho em pé ou caminhadas leves"}
             selected={atividade === "Leve"}
             onPress={() => setAtividade("Leve")}
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image={require("../../assets/images/iconeExerLeve.svg")}
+
+            image={{
+              uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729787046/leve_qcnhyy.png"
+            }}
+            imageWidth={60} 
+            imageHeight={42.86} 
+
           />
           <CardFlexImage
             title={"Moderada"}
             content={"Trabalho pesado ou atividade físicas regulares"}
             selected={atividade === "Moderada"}
             onPress={() => setAtividade("Moderada")}
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image={require("../../assets/images/moderado.svg")}
+            image={{
+              uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729787092/moderado_qfavlz.png"
+            }}
+            imageWidth={60} 
+            imageHeight={42.86} 
           />
           <CardFlexImage
             title={"Intensa"}
             content={"Atividade físicas intensas todos os dias"}
             selected={atividade === "Intensa"}
             onPress={() => setAtividade("Intensa")}
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image={require("../../assets/images/intensa.svg")}
+            image={{
+              uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729787100/intenso_os7b01.png"
+            }}
+            imageWidth={60} 
+            imageHeight={42.86} 
           />
         </View>
       </View>
@@ -102,6 +113,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 24,
     textAlign: "left",
-    width: "100%"
+    width: "100%",
+    marginBottom: 100
   }
 })

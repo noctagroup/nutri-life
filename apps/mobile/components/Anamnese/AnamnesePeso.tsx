@@ -84,8 +84,9 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   mainText: {
+    alignSelf: "center",
     fontSize: 24,
-    textAlign: "left",
+    textAlign: "center",
     width: "100%"
   }
 })

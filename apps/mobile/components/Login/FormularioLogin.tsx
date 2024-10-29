@@ -31,7 +31,7 @@ export default function FormularioLogin() {
     setError("")
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://167.99.232.38:3000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -83,7 +83,7 @@ export default function FormularioLogin() {
           <RedButton onPress={handleFormSubmission} />
         )}
         <OutlinedButton buttonText={`Login pelo\nGoogle`} />
-        <View style={{ flexDirection: "row", marginTop: 150 }}>
+        <View style={{ flexDirection: "row", marginTop: 100 }}>
           <Footer textoFooter={"Não cadastrado?\n"} footerOption={FooterOption.CADASTRO} />
         </View>
       </View>

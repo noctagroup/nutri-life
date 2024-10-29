@@ -19,7 +19,7 @@ export default function AnamneseFinal() {
     const dataNascIso = dataNasc.toISOString()
 
     try {
-      const response = await fetch("http://localhost:3000/anamnese", {
+      const response = await fetch("http://167.99.232.38:3000/anamnese", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +39,6 @@ export default function AnamneseFinal() {
         setLoading(false)
         router.push("/(home)/")
       } else {
-        // Em caso de erro
         AsyncStorage.removeItem("userToken")
         router.push("/(home)/")
       }
@@ -67,26 +66,27 @@ export default function AnamneseFinal() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Dados Pessoais</Text>
           <Text style={styles.whiteContent}>
-            <strong>Data de nascimento:</strong> {anamnesisData.dataNasc}
+            <Text style={styles.boldText}>Data de nascimento:</Text> {anamnesisData.dataNasc}
           </Text>
           <Text style={styles.whiteContent}>
-            <strong>Sexo:</strong> {anamnesisData.genero}
+            <Text style={styles.boldText}>Sexo:</Text> {anamnesisData.genero}
           </Text>
           <Text style={styles.whiteContent}>
-            <strong>Peso:</strong> {anamnesisData.peso}kg
+            <Text style={styles.boldText}>Peso:</Text> {anamnesisData.peso}kg
           </Text>
           <Text style={styles.whiteContent}>
-            <strong>Altura:</strong> {anamnesisData.altura}m
+            <Text style={styles.boldText}>Altura:</Text> {anamnesisData.altura}m
           </Text>
         </View>
 
         <View style={styles.sectionExtra}>
           <Text style={styles.sectionTitleExtra}>Informações Extras</Text>
           <Text style={styles.redContent}>
-            <strong>Objetivo:</strong> {anamnesisData.objetivo}
+            <Text style={styles.boldText}>Objetivo:</Text> {anamnesisData.objetivo}
           </Text>
           <Text style={styles.redContent}>
-            <strong>Nível de Atividade Física:</strong> {anamnesisData.atividade}
+            <Text style={styles.boldText}>Nível de Atividade Física:</Text>{" "}
+            {anamnesisData.atividade}
           </Text>
         </View>
       </View>
@@ -196,5 +196,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#9C121E",
     textDecorationLine: "underline"
+  },
+  boldText: {
+    fontWeight: "bold"
   }
 })
