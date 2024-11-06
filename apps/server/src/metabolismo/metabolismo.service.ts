@@ -20,8 +20,6 @@ export class MetabolismoService {
         this.constFeminino + 9.2 * ultimaAnamnese.pesoAtual + 3.1 * alturaCm - 4.3 * idade
     }
 
-    console.log(ultimaAnamnese.feitoEm)
-
     let metabolismoAjustado: number
     switch (ultimaAnamnese.atividadeFisica) {
       case AtividadeFisica.LEVE:
@@ -58,8 +56,6 @@ export class MetabolismoService {
       dataNasc = new Date(dataNascimento)
     }
 
-    console.log(dataNasc)
-
     const hoje = new Date()
     let idade = hoje.getFullYear() - dataNasc.getFullYear()
 
@@ -73,7 +69,6 @@ export class MetabolismoService {
       idade--
     }
 
-    console.log(idade)
     return idade
   }
 }

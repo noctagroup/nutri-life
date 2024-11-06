@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Alimento } from "src/alimentos/alimentos.entity"
 import { Usuario } from "src/usuario/usuario.entity"
@@ -64,18 +64,25 @@ export class RefeicaoService {
       order: { horaRefeicao: "desc" }
     })
 
+    if (!refeicao) {
+      throw new NotFoundException("Nenhuma refeição encontrada para esse usuário.")
+    }
+
     const alimentos = await this.refeicaoAlimentoRepository.find({
       where: { refeicao: { id: refeicao.id } }
     })
 
     const totalCalorias = alimentos.reduce((total, item) => {
+      if (!item.alimento || item.alimento.calorias === undefined) {
+        return total
+      }
       const caloriasPorQuantidade = (item.quantidade / 100) * item.alimento.calorias
       return total + caloriasPorQuantidade
     }, 0)
 
-    const nomeAlimentos = alimentos.map((alimento) => {
-      return alimento.alimento.alimento
-    })
+    const nomeAlimentos = alimentos
+      .filter((item) => item.alimento)
+      .map((item) => item.alimento.alimento)
 
     const ultimaRefeicao: UltimaRefeicaoDTO = {
       tipoRefeicao: refeicao.tipoRefeicao,

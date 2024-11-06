@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  UnauthorizedException,
-  UseGuards
-} from "@nestjs/common"
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/common"
 import { AlimentosService } from "src/alimentos/alimentos.service"
 import { AuthGuard } from "src/auth/auth.guard"
 import { AuthenticatedRequest } from "src/auth/authenticatedRequest.dto"
@@ -37,16 +28,16 @@ export class RefeicaoController {
   }
 
   @UseGuards(AuthGuard)
-  @Get(":id")
-  async getRefeicao(@Req() req: AuthenticatedRequest, @Param("id") id: number) {
-    return await this.refeicaoService.getRefeicaoById(id, req.user.sub)
-  }
-
-  @UseGuards(AuthGuard)
   @Get("/ultima")
   async getUltimaRefeicao(@Req() req: AuthenticatedRequest) {
     const idUsuario = req.user.sub
 
     return await this.refeicaoService.getUltimaRefeicao(idUsuario)
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(":id")
+  async getRefeicao(@Req() req: AuthenticatedRequest, @Param("id") id: number) {
+    return await this.refeicaoService.getRefeicaoById(id, req.user.sub)
   }
 }
