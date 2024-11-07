@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+
 import DropdownCard from "./DropdownCard" // Importa o novo componente
 import InputRowCard from "./InputRowCard" // Importa o novo componente
 

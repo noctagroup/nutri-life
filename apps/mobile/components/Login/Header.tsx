@@ -10,7 +10,7 @@ export default function Header() {
       }}>
       <Image
         source={{
-          uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729782190/logo-nutrilife_1_jnuuih.png"
+          uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1730997990/logo_y2gndv.png"
         }}
         style={{ marginTop: 30, width: 300, height: 143.96 }}
       />

@@ -1,6 +1,14 @@
 import { useRouter } from "expo-router"
 import { useState } from "react"
-import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import {
+  ActivityIndicator,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native"
 
 import { useCadastro } from "@/context/CadastroContext"
 
@@ -112,8 +120,8 @@ export default function FormularioCadastro() {
             <RedButton onPress={handleFormSubmission} />
           )}
 
-          <OutlinedButton buttonText={`Cadastro pelo\nGoogle`} />
-          <View style={{marginTop: 30}}></View>
+          {/* <OutlinedButton buttonText={`Cadastro pelo\nGoogle`} /> */}
+          <View style={{ marginTop: 30 }}></View>
           <Footer textoFooter={"Ja cadastrado?"} footerOption={FooterOption.LOGIN} />
         </ScrollView>
 
@@ -155,11 +163,11 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 50,
     paddingStart: 40,
     paddingEnd: 40,
-    paddingTop: 50,
+    paddingTop: 50
   },
   scrollContent: {
     alignItems: "center",
-    paddingBottom: 50,
+    paddingBottom: 50
   },
   errorText: {
     color: "red",

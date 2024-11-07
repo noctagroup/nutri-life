@@ -82,7 +82,7 @@ export default function FormularioLogin() {
         ) : (
           <RedButton onPress={handleFormSubmission} />
         )}
-        <OutlinedButton buttonText={`Login pelo\nGoogle`} />
+        {/* <OutlinedButton buttonText={`Login pelo\nGoogle`} /> */}
         <View style={{ flexDirection: "row", marginTop: 100 }}>
           <Footer textoFooter={"Não cadastrado?\n"} footerOption={FooterOption.CADASTRO} />
         </View>

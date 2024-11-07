@@ -1,5 +1,5 @@
 import React from "react"
-import { Text, View, StyleSheet } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import { PieChart } from "react-native-svg-charts"
 
 // Definição do tipo de dado para os itens do gráfico
@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
   dailyGoalText: {
     marginTop: 20,
     fontSize: 16,
-    color: "#000"
+    color: "#000",
+    marginBottom: 20
   },
   goalText: {
     fontWeight: "bold"

@@ -1,9 +1,14 @@
+import { router } from "expo-router"
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import GraficoCaloriaDiaria from "./GraficoCaloriaDiaria"
 import GraficoCaloriaSemanal from "./GraficoCaloriaSemanal"
 
 export default function PaginaHome() {
+  const handlePress = () => {
+    router.push("/adicionarConsumo")
+  }
+  // const { dados } = useCadastro()
   return (
     <ScrollView>
       <View style={styles.containerPage}>
@@ -12,7 +17,26 @@ export default function PaginaHome() {
           Olá, <Text style={styles.userName}>Usuario!</Text>
         </Text>
         <GraficoCaloriaDiaria />
+        <View style={styles.card}>
+          <View style={styles.cardLeft}>
+            <Image
+              source={{
+                uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1730999475/footsteps_er6ca4.png"
+              }}
+              style={{ width: 40, height: 40 }}
+            />
+          </View>
 
+          <View style={styles.cardRight}>
+            <Text style={styles.cardContent}>
+              Passos dados hoje: <Text style={{ fontWeight: "bold", color: "#9C121E" }}>3000</Text>
+            </Text>
+            <Text style={styles.cardContent}>
+              Isso dá em media<Text> 2,22 </Text>
+              <Text style={{ fontWeight: "bold", color: "#9C121E" }}>Kms</Text>
+            </Text>
+          </View>
+        </View>
         {/* Próxima refeição */}
         <View style={styles.containerContent}>
           <Text style={styles.mainText}>Sua ultima refeição foi:</Text>
@@ -48,7 +72,7 @@ export default function PaginaHome() {
         </View>
 
         {/* Botão Adicionar Consumo */}
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={handlePress}>
           <Text style={styles.addButtonText}>+ Adicionar Consumo</Text>
         </TouchableOpacity>
       </View>
@@ -105,7 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 15,
     borderRadius: 10,
-    width: "100%"
+    width: "100%",
+    elevation: 8
   },
   cardLeft: {
     flexDirection: "column",
@@ -150,8 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    alignItems: "center",
-    
+    alignItems: "center"
   },
   addButtonText: {
     color: "#FFF",
