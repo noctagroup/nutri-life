@@ -61,7 +61,8 @@ export class RefeicaoService {
   async getUltimaRefeicao(idUsuario: number): Promise<UltimaRefeicaoDTO> {
     const refeicao = await this.refeicaoRepository.findOne({
       where: { usuario: { id: idUsuario } },
-      order: { horaRefeicao: "desc" }
+      order: { horaRefeicao: "desc" },
+      relations: ["alimentos", "usuario"]
     })
 
     if (!refeicao) {
@@ -69,7 +70,8 @@ export class RefeicaoService {
     }
 
     const alimentos = await this.refeicaoAlimentoRepository.find({
-      where: { refeicao: { id: refeicao.id } }
+      where: { refeicao: { id: refeicao.id } },
+      relations: ["alimento"]
     })
 
     const totalCalorias = alimentos.reduce((total, item) => {
