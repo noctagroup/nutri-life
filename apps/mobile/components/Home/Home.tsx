@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { router, useFocusEffect } from "expo-router" // Certifique-se de importar useFocusEffect corretamente
+import { router, useFocusEffect } from "expo-router"
 import { useCallback, useState } from "react"
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
@@ -18,6 +18,12 @@ export default function PaginaHome() {
     totalCaloria: 0,
     hora: ""
   })
+  const [dadosUsuario, setDadosUsuario] = useState({
+    nome: "",
+    sobrenome: "",
+    email: ""
+  })
+
   const [consumoSemanal, setConsumoSemanal] = useState([])
   const [totalCaloriasSemanal, setTotalCaloriasSemanal] = useState(0)
 
@@ -71,7 +77,7 @@ export default function PaginaHome() {
 
     if (response.ok) {
       const metabolismo = await response.json()
-      setMetabolismo(metabolismo)
+      setMetabolismo(metabolismo.toFixed(2))
       setTotalCaloriasSemanal(metabolismo * 7)
     } else {
       console.error("Erro ao buscar metabolismo:", response.status)
@@ -130,6 +136,23 @@ export default function PaginaHome() {
     }
   }
 
+  const fetchDadosUsuario = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    const response = await fetch("http://167.99.232.38:3000/usuario", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.ok) {
+      const dadosUsuario = await response.json()
+      setDadosUsuario(dadosUsuario)
+    } else {
+      console.error("Erro ao buscar usuario:", response.status)
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -138,7 +161,8 @@ export default function PaginaHome() {
           fetchMetabolismo(),
           fetchPassos(),
           fetchUltimaRefeicao(),
-          fetchConsumoSemanal()
+          fetchConsumoSemanal(),
+          fetchDadosUsuario()
         ])
       }
 
@@ -154,7 +178,7 @@ export default function PaginaHome() {
     <ScrollView>
       <View style={styles.containerPage}>
         <Text style={styles.greetingText}>
-          Olá, <Text style={styles.userName}>Usuario!</Text>
+          Olá, <Text style={styles.userName}>{dadosUsuario.nome}!</Text>
         </Text>
         <GraficoCaloriaDiaria
           data={consumoDiario}
