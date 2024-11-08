@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   HttpCode,
-  HttpException,
+  HttpStatus,
   Req,
   UnauthorizedException,
   UseGuards
@@ -25,7 +25,7 @@ export class MetabolismoController {
   @UseGuards(AuthGuard)
   @HttpCode(200)
   @Get()
-  async calculaMetabolismoBasal(@Req() req: AuthenticatedRequest): Promise<number> {
+  async calculaMetabolismoBasal(@Req() req: AuthenticatedRequest) {
     const idUsuario = req.user.sub
 
     const usuario = await this.usuarioService.buscaUsuarioId(idUsuario)
@@ -37,7 +37,9 @@ export class MetabolismoController {
     const ultimaAnamnese = await this.anamneseService.pegaUltimaAnamneseIdUsuario(usuario.id)
 
     if (!ultimaAnamnese) {
-      throw new HttpException("Anamnese não feita pelo usuário", 500)
+      return {
+        statusCode: HttpStatus.NO_CONTENT
+      }
     }
 
     const tmb = await this.metabolismoService.calculaMetabolismoBasal(ultimaAnamnese)
