@@ -27,18 +27,17 @@ export default function HomeLayout() {
       />
 
       <Tabs.Screen
-        name="stats"
-        options={{
-          title: "Estatísticas",
-          tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />
-        }}
-      />
-
-      <Tabs.Screen
         name="adicionarConsumo"
         options={{
           title: "Adicionar Consumo",
           tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />
+        }}
+      />
+      <Tabs.Screen
+        name="stats"
+        options={{
+          title: "Refazer Anamnesis",
+          tabBarIcon: ({ color }) => <TabBarIcon name="list-alt" color={color} />
         }}
       />
     </Tabs>
