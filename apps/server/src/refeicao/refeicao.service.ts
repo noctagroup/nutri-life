@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
+import { endOfDay, startOfDay } from "date-fns"
 import { Alimento } from "src/alimentos/alimentos.entity"
 import { Usuario } from "src/usuario/usuario.entity"
-import { Repository } from "typeorm"
+import { Between, Repository } from "typeorm"
 
 import { CreateRefeicaoDto } from "./DTOs/criaRefeicao.dto"
+import { RefeicaoDiariaDto } from "./DTOs/refeicaoDiaria.dto"
 import { UltimaRefeicaoDTO } from "./DTOs/ultimaRefeicao"
 import { Refeicao } from "./refeicao.entity"
 import { RefeicaoAlimento } from "./refeicaoAlimento.entity"
@@ -94,5 +96,51 @@ export class RefeicaoService {
     }
 
     return ultimaRefeicao
+  }
+
+  async getRefeicaoDiaria(idUsuario: number): Promise<RefeicaoDiariaDto> {
+    const hojeInicio = startOfDay(new Date())
+    const hojeFim = endOfDay(new Date())
+
+    const refeicoes = await this.refeicaoRepository.find({
+      where: {
+        usuario: { id: idUsuario },
+        horaRefeicao: Between(hojeInicio, hojeFim)
+      },
+      order: { horaRefeicao: "desc" },
+      relations: ["alimentos", "usuario"]
+    })
+
+    const refeicoesNomes: string[] = []
+    const refeicoesCalorias: number[] = []
+    let totalCaloricoDiario = 0
+
+    for (const refeicao of refeicoes) {
+      const alimentos = await this.refeicaoAlimentoRepository.find({
+        where: { refeicao: { id: refeicao.id } },
+        relations: ["alimento"]
+      })
+
+      const caloriasRefeicao = alimentos.reduce((total, item) => {
+        if (!item.alimento || item.alimento.calorias === undefined) {
+          return total
+        }
+        const caloriasPorQuantidade = (item.quantidade / 100) * item.alimento.calorias
+        return total + caloriasPorQuantidade
+      }, 0)
+
+      totalCaloricoDiario += caloriasRefeicao
+
+      refeicoesNomes.push(refeicao.tipoRefeicao)
+      refeicoesCalorias.push(caloriasRefeicao)
+    }
+
+    const refeicaoDiariaDto: RefeicaoDiariaDto = {
+      refeicoes: refeicoesNomes,
+      calorias: refeicoesCalorias,
+      totalCalorais: totalCaloricoDiario
+    }
+
+    return refeicaoDiariaDto
   }
 }

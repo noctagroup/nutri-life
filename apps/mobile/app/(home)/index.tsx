@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router"
 import { useEffect } from "react"
-import { Text, View } from "react-native"
 
 import PaginaHome from "@/components/Home/Home"
 import Anamnesis from "@/hooks/Anamnesis"

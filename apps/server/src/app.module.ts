@@ -10,6 +10,8 @@ import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
 import { MetabolismoModule } from "./metabolismo/metabolismo.module"
+import { Passos } from "./passos/passos.entity"
+import { PassosModule } from "./passos/passos.module"
 import { Refeicao } from "./refeicao/refeicao.entity"
 import { RefeicaoModule } from "./refeicao/refeicao.module"
 import { RefeicaoAlimento } from "./refeicao/refeicaoAlimento.entity"
@@ -32,7 +34,7 @@ import { UsuarioModule } from "./usuario/usuario.module"
         username: configService.get<string>("DB_USERNAME"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_NAME"),
-        entities: [Alimento, Usuario, Anamnese, Refeicao, RefeicaoAlimento],
+        entities: [Alimento, Usuario, Anamnese, Refeicao, RefeicaoAlimento, Passos],
         synchronize: true
       })
     }),
@@ -41,7 +43,8 @@ import { UsuarioModule } from "./usuario/usuario.module"
     UsuarioModule,
     AnamneseModule,
     RefeicaoModule,
-    MetabolismoModule
+    MetabolismoModule,
+    PassosModule
   ],
   controllers: [AppController],
   providers: [AppService]

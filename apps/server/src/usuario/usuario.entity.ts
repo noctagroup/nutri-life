@@ -1,4 +1,5 @@
 import { Anamnese } from "src/anamnese/anamnese.entity"
+import { Passos } from "src/passos/passos.entity"
 import { Refeicao } from "src/refeicao/refeicao.entity"
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm"
 
@@ -25,4 +26,7 @@ export class Usuario {
 
   @OneToMany(() => Refeicao, (refeicao) => refeicao.usuario)
   refeicao: Refeicao
+
+  @OneToMany(() => Passos, (passos) => passos.usuario)
+  passos: Passos[]
 }

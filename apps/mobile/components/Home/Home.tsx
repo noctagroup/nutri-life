@@ -8,6 +8,10 @@ export default function PaginaHome() {
   const handlePress = () => {
     router.push("/adicionarConsumo")
   }
+
+  const fetchUltimaRefeicao = () => {
+    fetch()
+  }
   // const { dados } = useCadastro()
   return (
     <ScrollView>
