@@ -9,49 +9,27 @@ interface PieChartData {
   svg: { fill: string }
 }
 
-class GraficoCaloriaDiaria extends React.PureComponent {
-  render() {
-    const data: PieChartData[] = [
-      {
-        key: 1,
-        amount: 50,
-        svg: { fill: "#9C121E" } // Tom mais escuro de vermelho
-      },
-      {
-        key: 2,
-        amount: 50,
-        svg: { fill: "#C2183A" } // Tom de vermelho médio
-      },
-      {
-        key: 3,
-        amount: 40,
-        svg: { fill: "#D94F54" } // Tom de vermelho claro
-      },
-      {
-        key: 4,
-        amount: 95,
-        svg: { fill: "#E0828D" } // Outro tom de vermelho
-      },
-      {
-        key: 5,
-        amount: 35,
-        svg: { fill: "#F0B2B4" } // Tom mais claro
-      }
-    ]
+// Definindo as props que o componente aceitará
+interface GraficoCaloriaDiariaProps {
+  data: PieChartData[]
+  totalAmount: number
+  dailyGoal: number
+}
 
-    // Valor total fixo para o texto
-    const totalAmount = 2000 // Substitua pela lógica que você desejar
+class GraficoCaloriaDiaria extends React.PureComponent<GraficoCaloriaDiariaProps> {
+  render() {
+    const { data, totalAmount, dailyGoal } = this.props
 
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
         <View style={{ position: "relative", justifyContent: "center", alignItems: "center" }}>
           <PieChart
-            style={{ height: 200, width: 200 }} // Adicione a largura aqui
-            valueAccessor={({ item }: { item: PieChartData }) => item.amount} // Tipagem explícita
+            style={{ height: 200, width: 200 }}
+            valueAccessor={({ item }: { item: PieChartData }) => item.amount}
             data={data}
             spacing={0}
             outerRadius={"100%"}
-            innerRadius={"70%"} // Ajuste o innerRadius para torná-lo mais fino
+            innerRadius={"70%"}
           />
           <View style={{ position: "absolute", justifyContent: "center", alignItems: "center" }}>
             <Text style={{ color: "black", fontSize: 12 }}>Você consumiu</Text>
@@ -62,7 +40,7 @@ class GraficoCaloriaDiaria extends React.PureComponent {
           </View>
         </View>
         <Text style={styles.dailyGoalText}>
-          Sua meta diaria é <Text style={styles.goalText}>3000kcal</Text>
+          Sua meta diária é <Text style={styles.goalText}>{dailyGoal} kcal</Text>
         </Text>
       </View>
     )

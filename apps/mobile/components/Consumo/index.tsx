@@ -1,33 +1,91 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useState } from "react"
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
-import DropdownCard from "./DropdownCard" // Importa o novo componente
-import InputRowCard from "./InputRowCard" // Importa o novo componente
+import DropdownCard from "./DropdownCard"
+import InputRowCard from "./InputRowCard"
+
+interface InputRow {
+  id: number
+  alimentoId: number | null
+  grams: string
+}
 
 export default function PaginaConsumo() {
-  const [value, setValue] = useState(null)
-  const [items, setItems] = useState([
-    { label: "Almoço", value: "almoco" },
-    { label: "Janta", value: "janta" },
-    { label: "Café da Manhã", value: "cafeManha" },
-    { label: "Café da Tarde", value: "cafeTarde" },
-    { label: "Lanche", value: "lanche" }
+  const [value, setValue] = useState<string | null>(null)
+  const [items] = useState([
+    { label: "Almoço", value: "Almoco" },
+    { label: "Janta", value: "Janta" },
+    { label: "Café da Manhã", value: "CafeDaManha" },
+    { label: "Lanche", value: "Lanche" }
   ])
-
-  const [inputRows, setInputRows] = useState([{ id: 1, food: "", grams: "" }])
+  const [inputRows, setInputRows] = useState<InputRow[]>([{ id: 1, alimentoId: null, grams: "" }])
 
   const addRow = () => {
-    setInputRows([...inputRows, { id: inputRows.length + 1, food: "", grams: "" }])
+    setInputRows([...inputRows, { id: inputRows.length + 1, alimentoId: null, grams: "" }])
   }
 
-  const removeRow = (id) => {
+  const removeRow = (id: number) => {
     setInputRows(inputRows.filter((row) => row.id !== id))
+  }
+
+  // Função para salvar a refeição
+  const handleSaveMeal = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    if (!value) {
+      Alert.alert("Erro", "Por favor, selecione um tipo de refeição.")
+      return
+    }
+
+    // Filtra os dados e formata o corpo da requisição
+    const alimentos = inputRows
+      .filter((row) => row.alimentoId && row.grams)
+      .map((row) => ({
+        alimentoId: row.alimentoId!,
+        quantity: parseInt(row.grams, 10)
+      }))
+
+    if (alimentos.length === 0) {
+      Alert.alert("Erro", "Por favor, adicione pelo menos um alimento com quantidade.")
+      return
+    }
+
+    const mealData = {
+      time: new Date().toISOString(),
+      type: value,
+      alimentos: alimentos
+    }
+
+    try {
+      const response = await fetch("http://167.99.232.38:3000/refeicao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(mealData)
+      })
+
+      if (response.ok) {
+        Alert.alert("Sucesso", "Refeição salva com sucesso!")
+        setValue(null)
+        setInputRows([])
+      } else {
+        console.error("Erro ao salvar refeição:", response.status)
+        Alert.alert("Erro", "Não foi possível salvar a refeição. Tente novamente.")
+      }
+    } catch (error) {
+      console.error("Erro ao fazer a requisição:", error)
+      Alert.alert(
+        "Erro",
+        "Ocorreu um erro ao tentar salvar a refeição. Verifique sua conexão e tente novamente."
+      )
+    }
   }
 
   return (
     <View style={styles.containerPage}>
       <Text style={styles.title}>Qual foi sua refeição?</Text>
-
       <DropdownCard items={items} value={value} setValue={setValue} />
 
       <View style={styles.inputRowTitle}>
@@ -35,17 +93,25 @@ export default function PaginaConsumo() {
         <Text style={styles.title}>Quantas gramas?</Text>
       </View>
 
-      <ScrollView style={styles.inputContainer}>
-        {inputRows.map((row) => (
-          <InputRowCard key={row.id} row={row} removeRow={removeRow} />
-        ))}
+      <FlatList
+        data={inputRows}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <InputRowCard
+            row={item}
+            setInputRows={setInputRows}
+            inputRows={inputRows}
+            removeRow={removeRow}
+          />
+        )}
+        ListFooterComponent={() => (
+          <TouchableOpacity style={styles.roundButton} onPress={addRow}>
+            <Text style={styles.plusText}>+</Text>
+          </TouchableOpacity>
+        )}
+      />
 
-        <TouchableOpacity style={styles.roundButton} onPress={addRow}>
-          <Text style={styles.plusText}>+</Text>
-        </TouchableOpacity>
-      </ScrollView>
-
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton} onPress={handleSaveMeal}>
         <Text style={styles.addButtonText}>Salvar Refeição</Text>
       </TouchableOpacity>
     </View>
@@ -59,10 +125,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 40,
     justifyContent: "space-between"
-  },
-  inputContainer: {
-    flexGrow: 1,
-    paddingBottom: 10
   },
   inputRowTitle: {
     marginBottom: 10,

@@ -3,33 +3,44 @@ import { StyleSheet, Text, View } from "react-native"
 import { Defs, Line, LinearGradient, Stop } from "react-native-svg"
 import { BarChart } from "react-native-svg-charts"
 
-class GraficoCaloriaSemanal extends React.PureComponent {
+interface GraficoCaloriaSemanalProps {
+  data: number[]
+  totalCalories: number
+  metabolism: number
+}
+
+class GraficoCaloriaSemanal extends React.PureComponent<GraficoCaloriaSemanalProps> {
   render() {
-    const data = [100, 150, 200, 250, 300, 200, 150]
-    const CUT_OFF = 100
+    const { data, totalCalories, metabolism } = this.props
 
     const CustomGrid = ({ x, y }) => (
       <Line
         x1="0"
         x2="100%"
-        y1={y(CUT_OFF)}
-        y2={y(CUT_OFF)}
+        y1={y(metabolism)}
+        y2={y(metabolism)}
         stroke="gray"
         strokeDasharray={[4, 8]}
         strokeWidth={1}
       />
     )
 
+    const remainingCalories = (dailyCalories: number[], totalCalories: number): number => {
+      return totalCalories - dailyCalories.reduce((acc, calories) => acc + calories, 0)
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>Meta Calórica Semanal</Text>
-            <Text style={styles.calories}>2070.99</Text>
+            <Text style={styles.calories}>{remainingCalories(data, totalCalories).toFixed(2)}</Text>
           </View>
           <View>
             <Text style={styles.title}>Ainda Falta</Text>
-            <Text style={styles.remainingCalories}>400.90</Text>
+            <Text style={styles.remainingCalories}>
+              {remainingCalories(data, totalCalories).toFixed(2)}
+            </Text>
           </View>
         </View>
         <View style={styles.chartContainer}>

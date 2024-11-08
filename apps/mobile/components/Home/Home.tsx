@@ -1,23 +1,166 @@
-import { router } from "expo-router"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { router, useFocusEffect } from "expo-router" // Certifique-se de importar useFocusEffect corretamente
+import { useCallback, useState } from "react"
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import GraficoCaloriaDiaria from "./GraficoCaloriaDiaria"
 import GraficoCaloriaSemanal from "./GraficoCaloriaSemanal"
 
 export default function PaginaHome() {
+  const [consumoDiario, setConsumoDiario] = useState([])
+  const [caloriasTotal, setCaloriasTotal] = useState(0)
+  const [metabolismo, setMetabolismo] = useState(0)
+  const [passos, setPassos] = useState(0)
+  const [passosKm, setPassosKm] = useState(0)
+  const [ultimaRefeicao, setUltimaRefeicao] = useState({
+    tipoRefeicao: "",
+    alimentos: [""],
+    totalCaloria: 0,
+    hora: ""
+  })
+  const [consumoSemanal, setConsumoSemanal] = useState([])
+  const [totalCaloriasSemanal, setTotalCaloriasSemanal] = useState(0)
+
   const handlePress = () => {
     router.push("/adicionarConsumo")
   }
 
-  // const { dados } = useCadastro()
+  const getFillColor = (index: number) => {
+    const colors = ["#9C121E", "#C2183A", "#D94F54", "#E0828D", "#F0B2B4"]
+    return colors[index % colors.length]
+  }
+
+  const formatarHora = (horaISO: string): string => {
+    const data = new Date(horaISO)
+    const horas = data.getUTCHours().toString().padStart(2, "0")
+    const minutos = data.getUTCMinutes().toString().padStart(2, "0")
+    return `${horas}:${minutos}`
+  }
+
+  const fetchConsumoDiario = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    const response = await fetch("http://167.99.232.38:3000/refeicao/diaria", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      const caloriasData = data.calorias.map((caloria: number, index: number) => ({
+        key: index + 1,
+        amount: caloria,
+        svg: { fill: getFillColor(index) }
+      }))
+      setCaloriasTotal(data.totalCalorais)
+      setConsumoDiario(caloriasData)
+    } else {
+      console.error("Erro ao buscar dados:", response.status)
+    }
+  }
+
+  const fetchMetabolismo = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    const response = await fetch("http://167.99.232.38:3000/metabolismo", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.ok) {
+      const metabolismo = await response.json()
+      setMetabolismo(metabolismo)
+      setTotalCaloriasSemanal(metabolismo * 7)
+    } else {
+      console.error("Erro ao buscar metabolismo:", response.status)
+    }
+  }
+
+  const fetchPassos = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    const response = await fetch("http://167.99.232.38:3000/passos", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.ok) {
+      const passos = await response.json()
+      setPassos(passos)
+      setPassosKm(passos * 0.0007)
+    } else {
+      console.error("Erro ao buscar passos:", response.status)
+    }
+  }
+
+  const fetchUltimaRefeicao = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    const response = await fetch("http://167.99.232.38:3000/refeicao/ultima", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.ok) {
+      const ultimaRefeicao = await response.json()
+      setUltimaRefeicao(ultimaRefeicao)
+    } else {
+      console.error("Erro ao buscar ultima refeição:", response.status)
+    }
+  }
+
+  const fetchConsumoSemanal = async () => {
+    const token = await AsyncStorage.getItem("userToken")
+    const response = await fetch("http://167.99.232.38:3000/refeicao/semanal", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.ok) {
+      const consumoSemanal = await response.json()
+      setConsumoSemanal(consumoSemanal)
+    } else {
+      console.error("Erro ao buscar consumo semanal:", response.status)
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        await Promise.all([
+          fetchConsumoDiario(),
+          fetchMetabolismo(),
+          fetchPassos(),
+          fetchUltimaRefeicao(),
+          fetchConsumoSemanal()
+        ])
+      }
+
+      fetchData()
+
+      const intervalId = setInterval(fetchData, 10000)
+
+      return () => clearInterval(intervalId)
+    }, [])
+  )
+
   return (
     <ScrollView>
       <View style={styles.containerPage}>
-        {/* Saudação */}
         <Text style={styles.greetingText}>
           Olá, <Text style={styles.userName}>Usuario!</Text>
         </Text>
-        <GraficoCaloriaDiaria />
+        <GraficoCaloriaDiaria
+          data={consumoDiario}
+          dailyGoal={metabolismo}
+          totalAmount={caloriasTotal}
+        />
         <View style={styles.card}>
           <View style={styles.cardLeft}>
             <Image
@@ -30,22 +173,21 @@ export default function PaginaHome() {
 
           <View style={styles.cardRight}>
             <Text style={styles.cardContent}>
-              Passos dados hoje: <Text style={{ fontWeight: "bold", color: "#9C121E" }}>3000</Text>
+              Passos dados hoje:{" "}
+              <Text style={{ fontWeight: "bold", color: "#9C121E" }}>{passos}</Text>
             </Text>
             <Text style={styles.cardContent}>
-              Isso dá em media<Text> 2,22 </Text>
-              <Text style={{ fontWeight: "bold", color: "#9C121E" }}>Kms</Text>
+              Isso dá em média{" "}
+              <Text style={{ fontWeight: "bold", color: "#9C121E" }}>{passosKm.toFixed(2)}</Text> Km
             </Text>
           </View>
         </View>
-        {/* Próxima refeição */}
         <View style={styles.containerContent}>
-          <Text style={styles.mainText}>Sua ultima refeição foi:</Text>
+          <Text style={styles.mainText}>Sua última refeição foi:</Text>
           <View style={styles.containerButtons}>
-            {/* Primeiro Card */}
             <View style={styles.card}>
               <View style={styles.cardLeft}>
-                <Text style={styles.cardTitle}>Almoço</Text>
+                <Text style={styles.cardTitle}>{ultimaRefeicao.tipoRefeicao}</Text>
                 <Image
                   source={{
                     uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729794185/Breakfast_cg6dtn.png"
@@ -55,24 +197,24 @@ export default function PaginaHome() {
               </View>
 
               <View style={styles.cardRight}>
-                <Text style={styles.cardContent}>
-                  Arroz, Feijão, Salada de tomate, frango empanado
-                </Text>
+                <Text style={styles.cardContent}>{ultimaRefeicao.alimentos.join("; ")}</Text>
                 <View style={styles.cardFooter}>
                   <Text style={styles.cardFooterText}>
-                    546 <Text style={styles.kcalText}>Kcal</Text>
+                    {ultimaRefeicao.totalCaloria} <Text style={styles.kcalText}>Kcal</Text>
                   </Text>
-                  <Text style={styles.kcalText}>12:40</Text>
+                  <Text style={styles.kcalText}>{formatarHora(ultimaRefeicao.hora)}</Text>
                 </View>
               </View>
             </View>
 
-            {/* Segundo Card - Meta Calórica Semanal */}
-            <GraficoCaloriaSemanal />
+            <GraficoCaloriaSemanal
+              data={consumoSemanal}
+              totalCalories={totalCaloriasSemanal}
+              metabolism={metabolismo}
+            />
           </View>
         </View>
 
-        {/* Botão Adicionar Consumo */}
         <TouchableOpacity style={styles.addButton} onPress={handlePress}>
           <Text style={styles.addButtonText}>+ Adicionar Consumo</Text>
         </TouchableOpacity>

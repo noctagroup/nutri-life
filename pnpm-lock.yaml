@@ -102,6 +102,9 @@ importers:
       expo-web-browser:
         specifier: ~13.0.3
         version: 13.0.3(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.3(@babel/core@7.25.2))(encoding@0.1.13))
+      lodash.debounce:
+        specifier: ^4.0.8
+        version: 4.0.8
       metro-cache:
         specifier: ^0.80.12
         version: 0.80.12
