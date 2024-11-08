@@ -9,9 +9,6 @@ export default function PaginaHome() {
     router.push("/adicionarConsumo")
   }
 
-  const fetchUltimaRefeicao = () => {
-    fetch()
-  }
   // const { dados } = useCadastro()
   return (
     <ScrollView>

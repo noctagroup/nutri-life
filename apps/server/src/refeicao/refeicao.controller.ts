@@ -44,6 +44,14 @@ export class RefeicaoController {
   }
 
   @UseGuards(AuthGuard)
+  @Get("/semanal")
+  async getRefeicoesSemanal(@Req() req: AuthenticatedRequest) {
+    const idUsuario = req.user.sub
+
+    return await this.refeicaoService.getRefeicaoSemanal(idUsuario)
+  }
+
+  @UseGuards(AuthGuard)
   @Get(":id")
   async getRefeicao(@Req() req: AuthenticatedRequest, @Param("id") id: number) {
     return await this.refeicaoService.getRefeicaoById(id, req.user.sub)

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { endOfDay, startOfDay } from "date-fns"
+import { endOfDay, startOfDay, subDays } from "date-fns"
 import { Alimento } from "src/alimentos/alimentos.entity"
 import { Usuario } from "src/usuario/usuario.entity"
 import { Between, Repository } from "typeorm"
@@ -142,5 +142,50 @@ export class RefeicaoService {
     }
 
     return refeicaoDiariaDto
+  }
+
+  async getRefeicaoSemanal(
+    idUsuario: number
+  ): Promise<[number, number, number, number, number, number, number]> {
+    const hoje = new Date()
+    const diasDaSemana = Array.from({ length: 7 }, (_, i) => subDays(hoje, 6 - i))
+
+    const caloriasPorDia = await Promise.all(
+      diasDaSemana.map(async (dia) => {
+        const inicioDia = startOfDay(dia)
+        const fimDia = endOfDay(dia)
+
+        const refeicoes = await this.refeicaoRepository.find({
+          where: {
+            usuario: { id: idUsuario },
+            horaRefeicao: Between(inicioDia, fimDia)
+          },
+          relations: ["alimentos", "usuario"]
+        })
+
+        let totalCalorias = 0
+
+        for (const refeicao of refeicoes) {
+          const alimentos = await this.refeicaoAlimentoRepository.find({
+            where: { refeicao: { id: refeicao.id } },
+            relations: ["alimento"]
+          })
+
+          const caloriasRefeicao = alimentos.reduce((total, item) => {
+            if (!item.alimento || item.alimento.calorias === undefined) {
+              return total
+            }
+            const caloriasPorQuantidade = (item.quantidade / 100) * item.alimento.calorias
+            return total + caloriasPorQuantidade
+          }, 0)
+
+          totalCalorias += caloriasRefeicao
+        }
+
+        return totalCalorias
+      })
+    )
+
+    return caloriasPorDia as [number, number, number, number, number, number, number]
   }
 }
