@@ -8,7 +8,7 @@ export class MetabolismoService {
   private constFeminino = 447.6
 
   async calculaMetabolismoBasal(ultimaAnamnese: Anamnese): Promise<number> {
-    const alturaCm = ultimaAnamnese.altura
+    const alturaCm = ultimaAnamnese.altura * 100
     const idade = this.calcularIdade(ultimaAnamnese.dataNasc)
     let taxaMetabolismo: number
 

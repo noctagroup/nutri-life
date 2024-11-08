@@ -2,14 +2,12 @@ import React from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { PieChart } from "react-native-svg-charts"
 
-// Definição do tipo de dado para os itens do gráfico
 interface PieChartData {
   key: number
   amount: number
   svg: { fill: string }
 }
 
-// Definindo as props que o componente aceitará
 interface GraficoCaloriaDiariaProps {
   data: PieChartData[]
   totalAmount: number
@@ -20,13 +18,25 @@ class GraficoCaloriaDiaria extends React.PureComponent<GraficoCaloriaDiariaProps
   render() {
     const { data, totalAmount, dailyGoal } = this.props
 
+    // Define a cor cinza padrão caso não haja dados
+    const fallbackData: PieChartData[] = [
+      {
+        key: 1,
+        amount: 1,
+        svg: { fill: "#C0C0C0" } // Cor cinza para o gráfico vazio
+      }
+    ]
+
+    // Use os dados fornecidos ou o fallback em cinza se estiver vazio
+    const chartData = data && data.length > 0 ? data : fallbackData
+
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
         <View style={{ position: "relative", justifyContent: "center", alignItems: "center" }}>
           <PieChart
             style={{ height: 200, width: 200 }}
             valueAccessor={({ item }: { item: PieChartData }) => item.amount}
-            data={data}
+            data={chartData}
             spacing={0}
             outerRadius={"100%"}
             innerRadius={"70%"}

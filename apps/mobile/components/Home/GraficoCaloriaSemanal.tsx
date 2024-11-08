@@ -25,22 +25,22 @@ class GraficoCaloriaSemanal extends React.PureComponent<GraficoCaloriaSemanalPro
       />
     )
 
-    const remainingCalories = (dailyCalories: number[], totalCalories: number): number => {
+    const calculateRemainingCalories = (dailyCalories: number[], totalCalories: number): number => {
       return totalCalories - dailyCalories.reduce((acc, calories) => acc + calories, 0)
     }
+
+    const remainingCalories = calculateRemainingCalories(data, totalCalories).toFixed(2)
 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>Meta Calórica Semanal</Text>
-            <Text style={styles.calories}>{remainingCalories(data, totalCalories).toFixed(2)}</Text>
+            <Text style={styles.calories}>{totalCalories.toFixed(2)}</Text>
           </View>
           <View>
             <Text style={styles.title}>Ainda Falta</Text>
-            <Text style={styles.remainingCalories}>
-              {remainingCalories(data, totalCalories).toFixed(2)}
-            </Text>
+            <Text style={styles.remainingCalories}>{remainingCalories}</Text>
           </View>
         </View>
         <View style={styles.chartContainer}>
