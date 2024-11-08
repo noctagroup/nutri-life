@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/common"
+import { Body, Controller, Get, HttpStatus, Param, Post, Req, UseGuards } from "@nestjs/common"
 import { AlimentosService } from "src/alimentos/alimentos.service"
 import { AuthGuard } from "src/auth/auth.guard"
 import { AuthenticatedRequest } from "src/auth/authenticatedRequest.dto"
@@ -31,8 +31,15 @@ export class RefeicaoController {
   @Get("/ultima")
   async getUltimaRefeicao(@Req() req: AuthenticatedRequest) {
     const idUsuario = req.user.sub
+    const ultimaRefeicao = await this.refeicaoService.getUltimaRefeicao(idUsuario)
 
-    return await this.refeicaoService.getUltimaRefeicao(idUsuario)
+    if (!ultimaRefeicao) {
+      return {
+        statusCode: HttpStatus.NO_CONTENT
+      }
+    }
+
+    return ultimaRefeicao
   }
 
   @UseGuards(AuthGuard)
