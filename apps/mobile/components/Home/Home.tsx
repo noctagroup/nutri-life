@@ -209,27 +209,33 @@ export default function PaginaHome() {
         <View style={styles.containerContent}>
           <Text style={styles.mainText}>Sua última refeição foi:</Text>
           <View style={styles.containerButtons}>
-            <View style={styles.card}>
-              <View style={styles.cardLeft}>
-                <Text style={styles.cardTitle}>{ultimaRefeicao.tipoRefeicao}</Text>
-                <Image
-                  source={{
-                    uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729794185/Breakfast_cg6dtn.png"
-                  }}
-                  style={{ width: 40, height: 40 }}
-                />
-              </View>
+            {ultimaRefeicao.tipoRefeicao ? (
+              <View style={styles.card}>
+                <View style={styles.cardLeft}>
+                  <Text style={styles.cardTitle}>{ultimaRefeicao.tipoRefeicao}</Text>
+                  <Image
+                    source={{
+                      uri: "https://res.cloudinary.com/ds7amlveq/image/upload/v1729794185/Breakfast_cg6dtn.png"
+                    }}
+                    style={{ width: 40, height: 40 }}
+                  />
+                </View>
 
-              <View style={styles.cardRight}>
-                <Text style={styles.cardContent}>{ultimaRefeicao.alimentos.join("; ")}</Text>
-                <View style={styles.cardFooter}>
-                  <Text style={styles.cardFooterText}>
-                    {ultimaRefeicao.totalCaloria} <Text style={styles.kcalText}>Kcal</Text>
-                  </Text>
-                  <Text style={styles.kcalText}>{formatarHora(ultimaRefeicao.hora)}</Text>
+                <View style={styles.cardRight}>
+                  <Text style={styles.cardContent}>{ultimaRefeicao.alimentos.join("; ")}</Text>
+                  <View style={styles.cardFooter}>
+                    <Text style={styles.cardFooterText}>
+                      {ultimaRefeicao.totalCaloria} <Text style={styles.kcalText}>Kcal</Text>
+                    </Text>
+                    <Text style={styles.kcalText}>{formatarHora(ultimaRefeicao.hora)}</Text>
+                  </View>
                 </View>
               </View>
-            </View>
+            ) : (
+              <View style={styles.card}>
+                <Text style={styles.cardFooterText}>Não houve refeição</Text>
+              </View>
+            )}
 
             <GraficoCaloriaSemanal
               data={consumoSemanal}

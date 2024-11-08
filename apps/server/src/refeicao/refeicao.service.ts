@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { endOfDay, startOfDay, subDays } from "date-fns"
 import { Alimento } from "src/alimentos/alimentos.entity"
@@ -60,7 +60,7 @@ export class RefeicaoService {
     })
   }
 
-  async getUltimaRefeicao(idUsuario: number): Promise<UltimaRefeicaoDTO> {
+  async getUltimaRefeicao(idUsuario: number): Promise<UltimaRefeicaoDTO | void> {
     const refeicao = await this.refeicaoRepository.findOne({
       where: { usuario: { id: idUsuario } },
       order: { horaRefeicao: "desc" },
@@ -68,7 +68,7 @@ export class RefeicaoService {
     })
 
     if (!refeicao) {
-      throw new NotFoundException("Nenhuma refeição encontrada para esse usuário.")
+      return null
     }
 
     const alimentos = await this.refeicaoAlimentoRepository.find({
