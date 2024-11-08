@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { Alimento } from "src/alimentos/alimentos.entity"
-import { Usuario } from "src/usuario/usuario.entity"
+import { AlimentosModule } from "src/alimentos/alimentos.module"
+import { AlimentosService } from "src/alimentos/alimentos.service"
 import { UsuarioModule } from "src/usuario/usuario.module"
 import { UsuarioService } from "src/usuario/usuario.service"
 
@@ -11,11 +11,8 @@ import { RefeicaoService } from "./refeicao.service"
 import { RefeicaoAlimento } from "./refeicaoAlimento.entity"
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Refeicao, RefeicaoAlimento, Usuario, Alimento]),
-    UsuarioModule
-  ],
+  imports: [TypeOrmModule.forFeature([Refeicao, RefeicaoAlimento]), UsuarioModule, AlimentosModule],
   controllers: [RefeicaoController],
-  providers: [RefeicaoService, UsuarioService]
+  providers: [RefeicaoService, UsuarioService, AlimentosService]
 })
 export class RefeicaoModule {}

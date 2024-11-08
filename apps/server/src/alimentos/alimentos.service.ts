@@ -24,6 +24,17 @@ export class AlimentosService {
     return this.repository.find()
   }
 
+  // Seleciona alimentos
+  async getAlimentosId(alimentoId: number): Promise<Alimento> {
+    const alimento = await this.repository.findOne({ where: { id: alimentoId } })
+
+    if (!alimento) {
+      throw new NotFoundException()
+    }
+
+    return alimento
+  }
+
   // Método para inserir um novo alimento
   async insertAlimentos(alimentoInsert: AlimentoDTO): Promise<Alimento> {
     const novoAlimento = this.repository.create(alimentoInsert)

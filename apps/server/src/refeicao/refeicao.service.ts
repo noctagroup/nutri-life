@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Alimento } from "src/alimentos/alimentos.entity"
 import { Usuario } from "src/usuario/usuario.entity"
 import { Repository } from "typeorm"
 
 import { CreateRefeicaoDto } from "./DTOs/criaRefeicao.dto"
+import { UltimaRefeicaoDTO } from "./DTOs/ultimaRefeicao"
 import { Refeicao } from "./refeicao.entity"
 import { RefeicaoAlimento } from "./refeicaoAlimento.entity"
 
@@ -21,12 +22,7 @@ export class RefeicaoService {
     private readonly alimentoRepository: Repository<Alimento>
   ) {}
 
-  async createRefeicao(dto: CreateRefeicaoDto, idUsuario: number): Promise<void> {
-    const usuario = await this.usuarioRepository.findOne({ where: { id: idUsuario } })
-    if (!usuario) {
-      throw new Error("User not found")
-    }
-
+  async createRefeicao(dto: CreateRefeicaoDto, usuario: Usuario): Promise<void> {
     const refeicao = new Refeicao()
     refeicao.horaRefeicao = new Date(dto.time)
     refeicao.tipoRefeicao = dto.type
@@ -60,5 +56,43 @@ export class RefeicaoService {
       where: { id: idRefeicao, usuario: { id: idUsuario } },
       relations: ["alimentos", "usuario"]
     })
+  }
+
+  async getUltimaRefeicao(idUsuario: number): Promise<UltimaRefeicaoDTO> {
+    const refeicao = await this.refeicaoRepository.findOne({
+      where: { usuario: { id: idUsuario } },
+      order: { horaRefeicao: "desc" },
+      relations: ["alimentos", "usuario"]
+    })
+
+    if (!refeicao) {
+      throw new NotFoundException("Nenhuma refeição encontrada para esse usuário.")
+    }
+
+    const alimentos = await this.refeicaoAlimentoRepository.find({
+      where: { refeicao: { id: refeicao.id } },
+      relations: ["alimento"]
+    })
+
+    const totalCalorias = alimentos.reduce((total, item) => {
+      if (!item.alimento || item.alimento.calorias === undefined) {
+        return total
+      }
+      const caloriasPorQuantidade = (item.quantidade / 100) * item.alimento.calorias
+      return total + caloriasPorQuantidade
+    }, 0)
+
+    const nomeAlimentos = alimentos
+      .filter((item) => item.alimento)
+      .map((item) => item.alimento.alimento)
+
+    const ultimaRefeicao: UltimaRefeicaoDTO = {
+      tipoRefeicao: refeicao.tipoRefeicao,
+      alimentos: nomeAlimentos,
+      totalCaloria: totalCalorias,
+      hora: refeicao.horaRefeicao
+    }
+
+    return ultimaRefeicao
   }
 }

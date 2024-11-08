@@ -9,6 +9,7 @@ import { AlimentosService } from "./alimentos.service"
 @Module({
   imports: [TypeOrmModule.forFeature([Alimento]), AuthModule],
   providers: [AlimentosService],
-  controllers: [AlimentosController]
+  controllers: [AlimentosController],
+  exports: [AlimentosService, TypeOrmModule]
 })
 export class AlimentosModule {}

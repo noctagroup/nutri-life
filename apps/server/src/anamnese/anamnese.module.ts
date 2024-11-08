@@ -1,16 +1,15 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { AuthGuard } from "src/auth/auth.guard"
-import { Usuario } from "src/usuario/usuario.entity"
-import { UsuarioService } from "src/usuario/usuario.service"
+import { UsuarioModule } from "src/usuario/usuario.module"
 
 import { AnamneseController } from "./anamnese.controller"
 import { Anamnese } from "./anamnese.entity"
 import { AnamneseService } from "./anamnese.service"
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Anamnese, Usuario])],
+  imports: [TypeOrmModule.forFeature([Anamnese]), UsuarioModule],
   controllers: [AnamneseController],
-  providers: [AnamneseService, AuthGuard, UsuarioService]
+  providers: [AnamneseService],
+  exports: [AnamneseService, TypeOrmModule]
 })
 export class AnamneseModule {}

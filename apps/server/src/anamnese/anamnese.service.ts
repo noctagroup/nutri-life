@@ -48,4 +48,19 @@ export class AnamneseService {
 
     return !!anamnese
   }
+
+  async pegaUltimaAnamneseIdUsuario(userId: number): Promise<Anamnese | void> {
+    const ultimaAnamnese: Anamnese = await this.repository.findOne({
+      where: {
+        usuario: {
+          id: userId
+        }
+      },
+      order: {
+        feitoEm: "DESC"
+      }
+    })
+
+    return ultimaAnamnese
+  }
 }

@@ -9,6 +9,7 @@ import { AnamneseModule } from "./anamnese/anamnese.module"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
+import { MetabolismoModule } from "./metabolismo/metabolismo.module"
 import { Refeicao } from "./refeicao/refeicao.entity"
 import { RefeicaoModule } from "./refeicao/refeicao.module"
 import { RefeicaoAlimento } from "./refeicao/refeicaoAlimento.entity"
@@ -17,12 +18,6 @@ import { UsuarioModule } from "./usuario/usuario.module"
 
 @Module({
   imports: [
-    // TypeOrmModule.forRoot({
-    //   type: "sqlite",
-    //   database: "database.sqlite",
-    //   entities: [Alimento, Usuario, Anamnese],
-    //   synchronize: true
-    // }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ".env"
@@ -44,9 +39,9 @@ import { UsuarioModule } from "./usuario/usuario.module"
     AlimentosModule,
     AuthModule,
     UsuarioModule,
-    AuthModule,
     AnamneseModule,
-    RefeicaoModule
+    RefeicaoModule,
+    MetabolismoModule
   ],
   controllers: [AppController],
   providers: [AppService]
