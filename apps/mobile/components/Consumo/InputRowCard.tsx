@@ -65,29 +65,31 @@ export default function InputRowCard({
   }
 
   return (
-    <View style={styles.rowContainer}>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o alimento"
-        value={foodName}
-        onChangeText={handleFoodNameChange}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Gramas"
-        keyboardType="numeric"
-        value={grams}
-        onChangeText={(text) => {
-          setGrams(text)
-          const updatedRows = inputRows.map((item) =>
-            item.id === row.id ? { ...item, grams: text } : item
-          )
-          setInputRows(updatedRows)
-        }}
-      />
-      <TouchableOpacity onPress={() => removeRow(row.id)}>
-        <Text style={styles.removeButton}>Remover</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.rowContainer}>
+        <TextInput
+          style={{ ...styles.input, width: "55%", marginEnd: 20 }}
+          placeholder="Digite o alimento"
+          value={foodName}
+          onChangeText={handleFoodNameChange}
+        />
+        <TextInput
+          style={{ ...styles.input, width: "30%" }}
+          placeholder="Gramas"
+          keyboardType="numeric"
+          value={grams}
+          onChangeText={(text) => {
+            setGrams(text)
+            const updatedRows = inputRows.map((item) =>
+              item.id === row.id ? { ...item, grams: text } : item
+            )
+            setInputRows(updatedRows)
+          }}
+        />
+        <TouchableOpacity onPress={() => removeRow(row.id)}>
+          <Text style={styles.removeButton}>x</Text>
+        </TouchableOpacity>
+      </View>
 
       {suggestions.length > 0 && (
         <FlatList
@@ -98,6 +100,7 @@ export default function InputRowCard({
               <Text style={styles.suggestionText}>{item.alimento}</Text>
             </TouchableOpacity>
           )}
+          style={styles.suggestionsContainer}
         />
       )}
     </View>
@@ -105,23 +108,31 @@ export default function InputRowCard({
 }
 
 const styles = StyleSheet.create({
-  rowContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  container: {
     marginBottom: 10
   },
+  rowContainer: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    borderBottomWidth: 2,
+    borderColor: "#9C121E",
     padding: 10,
-    flex: 1,
+
     marginHorizontal: 5
   },
   removeButton: {
-    color: "red",
+    color: "#8F898D",
     fontWeight: "bold",
     marginLeft: 5
+  },
+  suggestionsContainer: {
+    marginTop: 5,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8
   },
   suggestionText: {
     padding: 10,
