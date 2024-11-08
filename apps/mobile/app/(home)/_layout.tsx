@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome"
+import LogoutIcon from "@mui/icons-material/Logout"
 import { Tabs } from "expo-router"
 import React from "react"
-
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"]
@@ -38,6 +38,13 @@ export default function HomeLayout() {
         options={{
           title: "Refazer Anamnesis",
           tabBarIcon: ({ color }) => <TabBarIcon name="list-alt" color={color} />
+        }}
+      />
+      <Tabs.Screen
+        name="logout"
+        options={{
+          title: "Sair",
+          tabBarIcon: ({ color }) => <TabBarIcon name="sign-out" color={color} />
         }}
       />
     </Tabs>
