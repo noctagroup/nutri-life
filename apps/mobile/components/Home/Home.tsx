@@ -1,7 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { router, useFocusEffect } from "expo-router"
 import { useCallback, useState } from "react"
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import {
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native"
 
 import GraficoCaloriaDiaria from "./GraficoCaloriaDiaria"
 import GraficoCaloriaSemanal from "./GraficoCaloriaSemanal"
@@ -26,6 +34,7 @@ export default function PaginaHome() {
 
   const [consumoSemanal, setConsumoSemanal] = useState([])
   const [totalCaloriasSemanal, setTotalCaloriasSemanal] = useState(0)
+  const [refreshing, setRefreshing] = useState(false)
 
   const handlePress = () => {
     router.push("/adicionarConsumo")
@@ -153,29 +162,33 @@ export default function PaginaHome() {
     }
   }
 
+  const fetchData = async () => {
+    await Promise.all([
+      fetchConsumoDiario(),
+      fetchMetabolismo(),
+      fetchPassos(),
+      fetchUltimaRefeicao(),
+      fetchConsumoSemanal(),
+      fetchDadosUsuario()
+    ])
+  }
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await fetchData()
+    setRefreshing(false)
+  }, [])
+
   useFocusEffect(
     useCallback(() => {
-      const fetchData = async () => {
-        await Promise.all([
-          fetchConsumoDiario(),
-          fetchMetabolismo(),
-          fetchPassos(),
-          fetchUltimaRefeicao(),
-          fetchConsumoSemanal(),
-          fetchDadosUsuario()
-        ])
-      }
-
       fetchData()
-
       const intervalId = setInterval(fetchData, 10000)
-
       return () => clearInterval(intervalId)
     }, [])
   )
 
   return (
-    <ScrollView>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <View style={styles.containerPage}>
         <Text style={styles.greetingText}>
           Olá, <Text style={styles.userName}>{dadosUsuario.nome}!</Text>
